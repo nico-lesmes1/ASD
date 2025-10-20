@@ -16,55 +16,45 @@ class Parser:
     
     def parse_S(self):
         if self.current_token in ['cuatro', 'cinco', 'uno', 'dos', 'tres']:
-            # S → B uno
             self.parse_B()
             self.match('uno')
         elif self.current_token == 'dos':
-            # S → dos C
             self.match('dos')
             self.parse_C()
         elif self.current_token in ['$', 'tres']:
-            # S → ε
             pass
         else:
             raise SyntaxError(f"Error en S: token inesperado {self.current_token}")
     
     def parse_A(self):
         if self.current_token in ['cuatro', 'cinco', 'uno', 'dos', 'tres']:
-            # A → S tres B C
             self.parse_S()
             self.match('tres')
             self.parse_B()
             self.parse_C()
         elif self.current_token == 'cuatro':
-            # A → cuatro
             self.match('cuatro')
         elif self.current_token == 'cinco':
-            # A → ε
             pass
         else:
             raise SyntaxError(f"Error en A: token inesperado {self.current_token}")
     
     def parse_B(self):
         if self.current_token in ['cuatro', 'cinco', 'uno', 'dos', 'tres']:
-            # B → A cinco C seis
             self.parse_A()
             self.match('cinco')
             self.parse_C()
             self.match('seis')
         elif self.current_token in ['uno', 'siete', 'cinco', '$', 'tres', 'seis']:
-            # B → ε
             pass
         else:
             raise SyntaxError(f"Error en B: token inesperado {self.current_token}")
     
     def parse_C(self):
         if self.current_token == 'siete':
-            # C → siete B
             self.match('siete')
             self.parse_B()
         elif self.current_token in ['$', 'tres', 'cinco', 'seis']:
-            # C → ε
             pass
         else:
             raise SyntaxError(f"Error en C: token inesperado {self.current_token}")
@@ -74,3 +64,15 @@ class Parser:
         if self.current_token != '$':
             raise SyntaxError("Entrada no completamente consumida")
 
+if __name__ == "__main__":
+    tokens = ['dos', 'tres']
+
+    
+    try:
+        parser = Parser(tokens)
+        parser.parse()
+        print(f"Cadena valida")
+    except SyntaxError as e:
+        print(f"ERROR SINTÁCTICO: {e}")
+    except Exception as e:
+        print(f" ERROR: {e}")
